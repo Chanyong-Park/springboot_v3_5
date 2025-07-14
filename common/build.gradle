@@ -1,0 +1,54 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.cooldragon'
+version = '0.0.3-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.38'
+    annotationProcessor 'org.projectlombok:lombok:1.18.38'
+    //testCompileOnly 'org.projectlombok:lombok:1.18.38'
+    //testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'	
+}
+
+tasks.named('test') {
+	//useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "nexus"
+            url = version.endsWith('SNAPSHOT') ? uri(findProperty("nexusUrl-snapshots"))
+                                               : uri(findProperty("nexusUrl-releases"))
+            credentials {
+                username = findProperty("nexusUsername")
+                password = findProperty("nexusPassword")
+            }
+			allowInsecureProtocol = true // HTTP 허용
+        }
+    }
+}

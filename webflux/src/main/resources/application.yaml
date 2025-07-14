@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: webflux
+  profiles:
+    active: local # 기본값, 배포 시 환경에 맞게 변경
+  security:
+    user:
+      name: admin
+      password: 1234
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs/json
